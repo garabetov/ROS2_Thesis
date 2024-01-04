@@ -24,25 +24,35 @@ using nav2_util::geometry_utils::euclidean_distance;
 namespace nav2_custom_controller
 {
 
- 
-template<typename Iter, typename Getter>
+// Define a templated function 'min_by'
+// This function finds the element in the range [begin, end) that has the minimum value
+// according to a provided comparison value obtained through the 'getCompareVal' function.
+// The 'getCompareVal' function is a getter function that extracts the comparison value from an element.
+template <typename Iter, typename Getter>
 Iter min_by(Iter begin, Iter end, Getter getCompareVal)
 {
-  if (begin == end) {
+  // Check if the range is empty. If so, return the 'end' iterator.
+  if (begin == end)
+  {
     return end;
   }
+  // Initialize variables to store the lowest comparison value and its corresponding iterator.
   auto lowest = getCompareVal(*begin);
   Iter lowest_it = begin;
-  for (Iter it = ++begin; it != end; ++it) {
+  // Iterate over the range starting from the second element.
+  for (Iter it = ++begin; it != end; ++it)
+  {
+    // Obtain the comparison value for the current element.
     auto comp = getCompareVal(*it);
-    if (comp < lowest) {
+    if (comp < lowest)
+    {
       lowest = comp;
       lowest_it = it;
     }
   }
+  // Return the iterator pointing to the element with the minimum comparison value.
   return lowest_it;
 }
-
 
 void CustomController::configure(const rclcpp_lifecycle::LifecycleNode::WeakPtr & parent,
     std::string name, const std::shared_ptr<tf2_ros::Buffer>  tf,
